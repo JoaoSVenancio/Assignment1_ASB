@@ -2,31 +2,31 @@ import toytree       # a tree plotting library
 import toyplot       # a general plotting library
 import numpy as np   # numerical library
 import toyplot.pdf   # pdf
-import toyplot.svg
+import toyplot.svg   # svg
 
 
 # Vai abrir o ficheiro da arvore de Raxml
-with open('nome_do_ficheiro.raxml.txt', 'r') as infile:
+with open('ficheiro_fasta.raxml.txt', 'r') as infile:
     newick = infile.read()
     tre = toytree.tree(newick)
 
 # Vai abrir o ficheiro da arvore do MrBayes
-with open('nome_do_ficheiro.nexus.con.tre', 'r') as infile:
+with open('ficheiro_mrbayes.nexus.con.tre', 'r') as infile:
     mb = infile.read()
     rmb = toytree.tree(mb,tree_format=10)
 
 
 
 # Enraizar a arvore de acordo com o(s) ancestral(ais) mais comum(ns)
-rtre = tre.root(names=["nome_do_ancestral","nome_do_ancestral"])
+rrmb = rmb.root(names=["nome_sequencia","nome_sequencia"])
 
 #Palete de cores para os Tips
 colorlist = [
-    "#d6557c" if "nome_da_especie" in tip else 
-    "#398f14" if "nome_da_especie" in tip else 
-    "#491570" if "nome_da_especie" in tip else 
-    "#960e0e" if "nome_da_especie" in tip else
-    "#5384a3" for tip in rtre.get_tip_labels()
+    "#d6557c" if "nome_especie" in tip else 
+    "#398f14" if "nome_especie" in tip else 
+    "#491570" if "nome_especie" in tip else 
+    "#960e0e" if "nome_especie" in tip else
+    "#5384a3" for tip in rrmb.get_tip_labels()
 ]
 
 #Buscar os valores de "support" e "prob" e colocar em variaveis
@@ -56,8 +56,8 @@ canvas, axes, mark = rmb.draw(node_labels=full_support, node_sizes=30,width=2000
 #print(rtre)
 #print(rmb)
 
-#Vai criar um ficheiro em "pdf" com a arvore filogenética
-toyplot.pdf.render(canvas, "nome_do_ficheiro_ToyTree.pdf")
+#Vai criar um ficheiro em ".pdf" com a arvore filogenética
+toyplot.pdf.render(canvas, "nome_ficheiro_ToyTree.pdf")
 
-
-#toyplot.svg.render(canvas, "ToyTree.svg")
+#Vai criar um ficheiro em ".svg" com a arvore filogenética
+toyplot.svg.render(canvas, "nome_ficheiro_ToyTree.svg")
